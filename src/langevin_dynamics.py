@@ -17,7 +17,7 @@ class LangevinDynamics(object):
 
     def sample(self):
         self.lr_decay()
-        loss = self.func(self.x)
+        loss = self.func(self.x.unsqueeze(0))
         loss.backward()
         self.optim.step()
         self.counter += 1

@@ -10,12 +10,19 @@ Follow the steps below to install the necessary libraries:
 
 ```bash
 cd $HOME
-git clone https://github.gatech.edu/asiahkoohi3/Langevin-dynamics.git
+git clone https://github.com/alisiahkoohi/Langevin-dynamics
+git clone https://github.com/alisiahkoohi/rosenbrock
+
 cd Langevin-dynamics
 conda create -n torch pip python=3.6
 source activate torch
 conda install pytorch torchvision cudatoolkit=10.1 -c pytorch #If your system has GPU
 pip install --user -r  requirements.txt
+
+cd $HOME/rosenbrock
+pip install -e .
+```
+
 ```
 
 ## Script descriptions

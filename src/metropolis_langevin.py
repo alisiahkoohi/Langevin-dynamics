@@ -12,7 +12,7 @@ class MetropolisAdjustedLangevin(object):
         self.x[1].data = x.data
 
         self.loss = [torch.zeros([1], device=x.device), torch.zeros([1], device=x.device)]
-        self.loss[0] = func(self.x[0])
+        self.loss[0] = func(self.x[0].unsqueeze(0))
         self.loss[1].data = self.loss[0].data
 
         self.grad = [torch.zeros(x.shape, device=x.device), torch.zeros(x.shape, device=x.device)]
@@ -34,7 +34,7 @@ class MetropolisAdjustedLangevin(object):
         while not accepted:
             self.x[1].grad = self.grad[1].data
             self.P = self.optim.step()
-            self.loss[1] = self.func(self.x[1])
+            self.loss[1] = self.func(self.x[1].unsqueeze(0))
             self.grad[1].data = torch.autograd.grad(self.loss[1], [self.x[1]], 
                 create_graph=False)[0].data
 
