@@ -23,7 +23,6 @@ cd $HOME/rosenbrock
 pip install -e .
 ```
 
-```
 
 ## Script descriptions
 
