@@ -63,5 +63,4 @@ if __name__ == '__main__':
     plt.xlim([-6, 6]); plt.ylim([-3, 25])
     plt.title(r"$\mathbf{x} \sim p_X(\mathbf{x})$")
     plt.tight_layout()
-    # plt.savefig('figs/banana-LD.png', format="png", bbox_inches="tight", dpi=300)
     plt.show()

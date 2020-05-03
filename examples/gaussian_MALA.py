@@ -78,5 +78,4 @@ if __name__ == '__main__':
     plt.xlim([-3, 6]); plt.ylim([-4, 5])
     plt.title(r"$\mathbf{x} \sim \mathrm{N}(\mu, \Sigma)$")
     plt.tight_layout()
-    # plt.savefig('figs/gaussian-MALA.png', format="png", bbox_inches="tight", dpi=300)
     plt.show()
