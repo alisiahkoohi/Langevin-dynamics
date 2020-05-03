@@ -15,6 +15,9 @@ else:
     device = torch.device('cuda')
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
+def rosenbrock_negative_log(x):
+    return rosen_dist.nl_pdf(x.unsqueeze(0))
+
 if __name__ == '__main__':
 
     # Initialize parameters
@@ -27,7 +30,7 @@ if __name__ == '__main__':
 
     x = torch.randn([2], requires_grad=True, device=device)
     max_itr = int(3e4)
-    langevin_dynamics = LangevinDynamics(x, rosen_dist.nl_pdf, lr=1e-1, lr_final=5e-2, 
+    langevin_dynamics = LangevinDynamics(x, rosenbrock_negative_log, lr=1e-1, lr_final=5e-2, 
         max_itr=max_itr, device=device)
 
     hist_samples = []

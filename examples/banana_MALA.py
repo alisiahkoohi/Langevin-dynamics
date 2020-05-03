@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from langevin_sampling.samplers import *
 from rosenbrock import *
 from tqdm import tqdm
-np.random.seed(19)
-torch.manual_seed(19)
+# np.random.seed(19)
+# torch.manual_seed(19)
 
 if not torch.cuda.is_available():
     device = torch.device('cpu')
@@ -13,6 +13,9 @@ if not torch.cuda.is_available():
 else:
     device = torch.device('cuda')
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
+
+def rosenbrock_negative_log(x):
+    return rosen_dist.nl_pdf(x.unsqueeze(0))
 
 if __name__ == '__main__':
 
@@ -26,7 +29,7 @@ if __name__ == '__main__':
 
     x = torch.randn([2], requires_grad=True, device=device)
     max_itr = int(1e4)
-    mala = MetropolisAdjustedLangevin(x, rosen_dist.nl_pdf, 
+    mala = MetropolisAdjustedLangevin(x, rosenbrock_negative_log, 
         lr=15e-1, lr_final=9e-1, max_itr=max_itr, device=device)
 
     hist_samples = []
