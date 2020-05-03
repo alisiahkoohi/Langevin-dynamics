@@ -2,7 +2,7 @@
 
 Implementation of [stochastic gradient Langevin dynamics](https://www.ics.uci.edu/~welling/publications/papers/stoclangevin_v6.pdf) (SGDL) and  [preconditioned SGLD](https://arxiv.org/pdf/1512.07666.pdf) (pSGLD), invloving simple examples of using unadjusted Langevin dynamics and [Metropolis-adjusted Langevin algorithm](https://link.springer.com/article/10.1023/A:1023562417138) (MALA) to sample from a 2D Gaussian distribution and "banana" distribution.
 
-<!-- ![](examples/figs/banana-MALA.png) -->
+![](examples/figs/banana-MALA.png)
 
 ## Prerequisites
 
