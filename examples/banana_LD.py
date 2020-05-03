@@ -1,8 +1,8 @@
 import torch
-from langevin_dynamics import LangevinDynamics
+from langevin_sampling.samplers import *
 import numpy as np
 import matplotlib.pyplot as plt
-from rosenbrock import rosenbrock
+from rosenbrock import *
 import copy
 from tqdm import tqdm
 np.random.seed(19)
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     b = torch.ones([2, 1], device=device)
 
     # Define the distribution
-    rosen_dist = rosenbrock.RosenbrockDistribution(mu, a, b, device=device)
+    rosen_dist = RosenbrockDistribution(mu, a, b, device=device)
 
     x = torch.randn([2], requires_grad=True, device=device)
     max_itr = int(3e4)

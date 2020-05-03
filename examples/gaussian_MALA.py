@@ -1,8 +1,7 @@
 import torch
-from langevin_dynamics import LangevinDynamics
 import numpy as np
 import matplotlib.pyplot as plt
-import copy
+from langevin_sampling.samplers import *
 from tqdm import tqdm
 np.random.seed(19)
 torch.manual_seed(19)
@@ -44,13 +43,13 @@ if __name__ == '__main__':
 
     x = torch.zeros([2], requires_grad=True, device=device)
     max_itr = int(1e4)
-    langevin_dynamics = LangevinDynamics(x, gaussian_dist.nl_pdf, lr=1e-1, lr_final=4e-2, 
-        max_itr=max_itr, device=device)
+    mala = MetropolisAdjustedLangevin(x, gaussian_dist.nl_pdf, 
+        lr=1e-1, lr_final=4e-2, max_itr=max_itr, device=device)
 
     hist_samples = []
     loss_log = []
     for j in tqdm(range(max_itr)):
-        est, loss = langevin_dynamics.sample()
+        est, loss = mala.sample()
         loss_log.append(loss)
         if j%3 == 0:
             hist_samples.append(est.cpu().numpy())
@@ -72,12 +71,12 @@ if __name__ == '__main__':
     plt.scatter(est_samples[:, 0], est_samples[:, 1], s=.5, color="#db76bf")
     plt.xlabel(r"$x_1$"); plt.ylabel(r"$x_2$")
     plt.xlim([-3, 6]); plt.ylim([-4, 5])
-    plt.title("Langevin dynamics")
+    plt.title("Metropolis-adjusted Langevin dynamics")
     plt.subplot(122); 
     p2 = plt.scatter(true_samples[:, 0], true_samples[:, 1], s=.5, color="#5e838f")
     plt.xlabel(r"$x_1$"); plt.ylabel(r"$x_2$")
     plt.xlim([-3, 6]); plt.ylim([-4, 5])
     plt.title(r"$\mathbf{x} \sim \mathrm{N}(\mu, \Sigma)$")
     plt.tight_layout()
-    # plt.savefig('figs/gaussian-LD.png', format="png", bbox_inches="tight", dpi=300)
+    # plt.savefig('figs/gaussian-MALA.png', format="png", bbox_inches="tight", dpi=300)
     plt.show()

@@ -1,8 +1,8 @@
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from metropolis_langevin import MetropolisAdjustedLangevin
-from rosenbrock import rosenbrock
+from langevin_sampling.samplers import *
+from rosenbrock import *
 from tqdm import tqdm
 np.random.seed(19)
 torch.manual_seed(19)
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     b = torch.ones([2, 1], device=device)
 
     # Define the distribution
-    rosen_dist = rosenbrock.RosenbrockDistribution(mu, a, b, device=device)
+    rosen_dist = RosenbrockDistribution(mu, a, b, device=device)
 
     x = torch.randn([2], requires_grad=True, device=device)
     max_itr = int(1e4)
