@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from langevin_sampling.samplers import *
 from rosenbrock import *
 from tqdm import tqdm
-# np.random.seed(19)
-# torch.manual_seed(19)
+np.random.seed(19)
+torch.manual_seed(19)
 
 if not torch.cuda.is_available():
     device = torch.device('cpu')
