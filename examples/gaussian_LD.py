@@ -1,5 +1,5 @@
 import torch
-from langevin_sampling.samplers import *
+from langevin_sampling.samplers import LangevinDynamics
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
@@ -17,20 +17,21 @@ else:
 class GaussianDistribution(object):
     def __init__(self, mu, cov, device='cuda'):
         super(GaussianDistribution, self).__init__()
-        
+
         self.mu = mu
         self.cov = cov
         self.precision = torch.inverse(cov)
 
-        self.R = torch.cholesky(self.cov)
-        self.normal = torch.distributions.normal.Normal(torch.zeros_like(mu), 
+        self.R = torch.linalg.cholesky(self.cov)
+        self.normal = torch.distributions.normal.Normal(torch.zeros_like(mu),
             torch.ones_like(mu))
 
     def nl_pdf(self, x):
-        return 0.5*(((x - self.mu).T).matmul(self.precision)).matmul(x - self.mu)
+        return 0.5*(
+            ((x - self.mu).T).matmul(self.precision)).matmul(x - self.mu)
 
     def sample(self):
-        return self.R.matmul(self.normal.sample()) + self.mu 
+        return self.R.matmul(self.normal.sample()) + self.mu
 
 
 if __name__ == '__main__':
@@ -38,14 +39,23 @@ if __name__ == '__main__':
     dim = 2
 
     mu = torch.Tensor([1.2, .6], device=device)
-    cov = 0.9*(torch.ones([2, 2], device=device) - torch.eye(2, device=device)).T + \
+    cov = (
+        0.9*(torch.ones([2, 2], device=device) -
+             torch.eye(2, device=device)).T +
         torch.eye(2, device=device)*1.3
+    )
     gaussian_dist = GaussianDistribution(mu, cov, device=device)
 
     x = torch.zeros([2], requires_grad=True, device=device)
     max_itr = int(1e4)
-    langevin_dynamics = LangevinDynamics(x, gaussian_dist.nl_pdf, lr=1e-1, lr_final=4e-2, 
-        max_itr=max_itr, device=device)
+    langevin_dynamics = LangevinDynamics(
+        x,
+        gaussian_dist.nl_pdf,
+        lr=1e-1,
+        lr_final=4e-2,
+        max_itr=max_itr,
+        device=device
+    )
 
     hist_samples = []
     loss_log = []
@@ -62,21 +72,28 @@ if __name__ == '__main__':
         true_samples[j, :] = gaussian_dist.sample().cpu().numpy()
 
     fig = plt.figure("training logs - net", dpi=150, figsize=(7, 2.5))
-    plt.plot(loss_log); plt.title("Unnormalized PDF")
+    plt.plot(loss_log)
+    plt.title("Unnormalized PDF")
     plt.xlabel("Iterations")
     plt.ylabel(r"$- \log \ \mathrm{N}(\mathbf{x} | \mu, \Sigma) + const.$")
     plt.grid()
 
     fig = plt.figure(dpi=150, figsize=(9, 4))
-    plt.subplot(121); 
-    plt.scatter(est_samples[:, 0], est_samples[:, 1], s=.5, color="#db76bf")
-    plt.xlabel(r"$x_1$"); plt.ylabel(r"$x_2$")
-    plt.xlim([-3, 6]); plt.ylim([-4, 5])
+    plt.subplot(121)
+    plt.scatter(est_samples[:, 0], est_samples[:, 1], s=.5,
+                color="#db76bf")
+    plt.xlabel(r"$x_1$")
+    plt.ylabel(r"$x_2$")
+    plt.xlim([-3, 6])
+    plt.ylim([-4, 5])
     plt.title("Langevin dynamics")
-    plt.subplot(122); 
-    p2 = plt.scatter(true_samples[:, 0], true_samples[:, 1], s=.5, color="#5e838f")
-    plt.xlabel(r"$x_1$"); plt.ylabel(r"$x_2$")
-    plt.xlim([-3, 6]); plt.ylim([-4, 5])
+    plt.subplot(122)
+    p2 = plt.scatter(true_samples[:, 0], true_samples[:, 1], s=.5,
+                     color="#5e838f")
+    plt.xlabel(r"$x_1$")
+    plt.ylabel(r"$x_2$")
+    plt.xlim([-3, 6])
+    plt.ylim([-4, 5])
     plt.title(r"$\mathbf{x} \sim \mathrm{N}(\mu, \Sigma)$")
     plt.tight_layout()
     plt.show()

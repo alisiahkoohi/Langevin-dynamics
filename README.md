@@ -15,7 +15,6 @@ cd $HOME
 git clone https://github.com/alisiahkoohi/Langevin-dynamics
 cd Langevin-dynamics
 pip install -e .
-pip install --user -r  requirements.txt
 ```
 
 
@@ -25,7 +24,7 @@ pip install --user -r  requirements.txt
 
 `langevin_sampling/precondSGLD.py`: pSGLD optimizer.
 
-`langevin_sampling/samplers.py`: 
+`langevin_sampling/samplers.py`:
 
 * Implements `LangevinDynamics` class that given negative-log of unnormalized density function and starting guess, runs Langevin dynamics to sample from the given density.
 
