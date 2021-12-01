@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from rosenbrock import rosenbrock
 import copy
 from tqdm import tqdm
-np.random.seed(19)
-torch.manual_seed(19)
+np.random.seed(10)
+torch.manual_seed(10)
 
 if not torch.cuda.is_available():
     device = torch.device('cpu')
@@ -29,12 +29,12 @@ if __name__ == '__main__':
     rosen_dist = rosenbrock.RosenbrockDistribution(mu, a, b, device=device)
 
     x = torch.randn([2], requires_grad=True, device=device)
-    max_itr = int(5e4)
+    max_itr = int(1e5)
     langevin_dynamics = LangevinDynamics(
         x,
         rosenbrock_negative_log,
-        lr=2e0,
-        lr_final=5e-1,
+        lr=2.5,
+        lr_final=1e-2,
         max_itr=max_itr,
         device=device
     )
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         loss_log.append(loss)
         if j%10 == 0:
             hist_samples.append(est.cpu().numpy())
-    est_samples = np.array(hist_samples)[200:]
+    est_samples = np.array(hist_samples)[500:]
 
     num_samples = est_samples.shape[0]
     true_samples = rosen_dist.sample(num_samples).cpu().numpy()
