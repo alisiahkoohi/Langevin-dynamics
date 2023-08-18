@@ -47,8 +47,8 @@ class MetropolisAdjustedLangevin(object):
             torch.zeros(x.shape, device=x.device, requires_grad=True),
             torch.zeros(x.shape, device=x.device, requires_grad=True)
             ]
-        self.x[0].data = x.data
-        self.x[1].data = x.data
+        self.x[0].data = x.data.clone()
+        self.x[1].data = x.data.clone()
 
         self.loss = [torch.zeros([1], device=x.device),
                      torch.zeros([1], device=x.device)]
