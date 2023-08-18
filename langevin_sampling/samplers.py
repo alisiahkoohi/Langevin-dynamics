@@ -62,6 +62,11 @@ class MetropolisAdjustedLangevin(object):
         self.grad[1].data = self.grad[0].data
 
         self.optim = pSGLD([self.x[1]], lr, weight_decay=0.0)
+        self.P = [
+            torch.ones(x.shape, device=x.device, requires_grad=False),
+            torch.ones(x.shape, device=x.device, requires_grad=False)
+            ]
+
         self.lr = lr
         self.lr_final = lr_final
         self.max_itr = max_itr
@@ -74,7 +79,7 @@ class MetropolisAdjustedLangevin(object):
         self.lr_decay()
         while not accepted:
             self.x[1].grad = self.grad[1].data
-            self.P = self.optim.step()
+            self.P[1] = self.optim.step()
             self.loss[1] = self.func(self.x[1])
             self.grad[1].data = torch.autograd.grad(
                 self.loss[1], [self.x[1]], create_graph=False)[0].data
@@ -84,16 +89,19 @@ class MetropolisAdjustedLangevin(object):
                 self.grad[0].data = self.grad[1].data
                 self.loss[0].data = self.loss[1].data
                 self.x[0].data = self.x[1].data
+                self.P[0].data = self.P[1].data
                 accepted = True
             else:
                 self.x[1].data = self.x[0].data
+                self.P[1].data = self.P[0].data
         self.counter += 1
         return copy.deepcopy(self.x[1].data), self.loss[1].item()
 
     def proposal_dist(self, idx):
         return (-(.25 / self.lr_fn(self.counter)) *
-                torch.norm(self.x[idx] - self.x[idx^1] -
-                           self.lr_fn(self.counter)*self.grad[idx^1]/self.P)**2
+                (self.x[idx] - self.x[idx^1] -
+                           self.lr_fn(self.counter)*self.grad[idx^1]/self.P[1])*self.P[1]@(self.x[idx] - self.x[idx^1] -
+                           self.lr_fn(self.counter)*self.grad[idx^1]/self.P[1])
         )
 
     def sample_prob(self):
