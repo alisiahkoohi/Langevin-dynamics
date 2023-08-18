@@ -73,7 +73,7 @@ python examples/banana_MALA.py
 
 ## Questions
 
-Please contact alisk@gatech.edu for further questions.
+Please contact alisk@rice.edu for further questions.
 
 
 ## Author
