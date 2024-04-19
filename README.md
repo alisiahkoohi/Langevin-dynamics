@@ -9,9 +9,7 @@ PyTorch implementation of [stochastic gradient Langevin dynamics](https://www.ic
 Follow the steps below to install the necessary libraries:
 
 ```bash
-git clone https://github.com/alisiahkoohi/Langevin-dynamics
-cd Langevin-dynamics
-pip install -e .
+pip install langevin-sampling
 ```
 
 ## Script descriptions

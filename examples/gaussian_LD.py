@@ -10,10 +10,8 @@ torch.manual_seed(19)
 
 if not torch.cuda.is_available():
     device = torch.device('cpu')
-    torch.set_default_device('torch.FloatTensor')
 else:
     device = torch.device('cuda')
-    torch.set_default_device('torch.cuda.FloatTensor')
 
 
 class GaussianDistribution(object):
