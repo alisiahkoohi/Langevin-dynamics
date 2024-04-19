@@ -22,8 +22,8 @@ def rosenbrock_negative_log(x):
 if __name__ == '__main__':
 
     # Initialize parameters
-    mu = torch.Tensor([0.0], device=device)
-    a = torch.Tensor([.2], device=device)
+    mu = torch.tensor([0.0], device=device)
+    a = torch.tensor([.2], device=device)
     b = torch.ones([2, 1], device=device)
 
     # Define the distribution

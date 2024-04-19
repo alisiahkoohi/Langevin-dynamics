@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     dim = 2
 
-    mu = torch.Tensor([1.2, .6], device=device)
+    mu = torch.tensor([1.2, .6], device=device)
     cov = (
         0.9 *
         (torch.ones([2, 2], device=device) - torch.eye(2, device=device)).T +
