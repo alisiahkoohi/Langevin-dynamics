@@ -202,7 +202,7 @@ class MetropolisAdjustedLangevin(object):
             self.grad[1].data = torch.autograd.grad(self.loss[1], [self.x[1]],
                                                     create_graph=False)[0].data
 
-            alpha = min([1.0, self.sample_prob()])
+            alpha = min([1.0, self.sample_prob().item()])
             if torch.rand([1]) <= alpha:
                 self.grad[0].data = self.grad[1].data
                 self.loss[0].data = self.loss[1].data

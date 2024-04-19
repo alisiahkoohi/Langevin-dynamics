@@ -28,7 +28,7 @@ class GaussianDistribution(object):
 
     def nl_pdf(self, x):
         return 0.5 * ((
-            (x - self.mu).T).matmul(self.precision)).matmul(x - self.mu)
+            (x - self.mu)).matmul(self.precision)).matmul(x - self.mu)
 
     def sample(self):
         return self.R.matmul(self.normal.sample()) + self.mu
